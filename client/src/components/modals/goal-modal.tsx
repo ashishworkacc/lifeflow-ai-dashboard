@@ -39,7 +39,7 @@ export default function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     if (goal) {
       setTitle(goal.title);
       setDescription(goal.description || "");
-      setProgress(goal.progress);
+      setProgress(goal.currentValue);
       setTargetDate(goal.targetDate ? new Date(goal.targetDate).toISOString().split('T')[0] : "");
       setColor(goal.color);
     } else {
@@ -102,7 +102,7 @@ export default function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     const goalData = {
       title: title.trim(),
       description: description.trim() || undefined,
-      progress,
+      currentValue: progress,
       targetDate: targetDate ? new Date(targetDate) : undefined,
       color,
     };

@@ -432,7 +432,11 @@ export class MemStorage implements IStorage {
   async getGoalEntries(goalId: string): Promise<GoalEntry[]> {
     return Array.from(this.goalEntries.values())
       .filter(entry => entry.goalId === goalId)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort(
+        (a, b) =>
+          (b.date ? new Date(b.date).getTime() : 0) -
+          (a.date ? new Date(a.date).getTime() : 0)
+      );
   }
 
   async createGoalEntry(entry: InsertGoalEntry): Promise<GoalEntry> {
@@ -450,7 +454,7 @@ export class MemStorage implements IStorage {
     if (goal) {
       const updatedGoal = { 
         ...goal, 
-        currentValue: goal.currentValue + entry.value 
+        currentValue: (goal.currentValue ?? 0) + entry.value
       };
       this.goals.set(goal.id, updatedGoal);
     }
@@ -467,7 +471,7 @@ export class MemStorage implements IStorage {
     if (goal) {
       const updatedGoal = { 
         ...goal, 
-        currentValue: Math.max(0, goal.currentValue - entry.value)
+        currentValue: Math.max(0, (goal.currentValue ?? 0) - entry.value)
       };
       this.goals.set(goal.id, updatedGoal);
     }

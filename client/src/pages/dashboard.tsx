@@ -20,6 +20,26 @@ import { calculateHealthScore } from "@/lib/health-score";
 import { Plus, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface DashboardData {
+  user: any;
+  tasks: any[];
+  habits: any[];
+  goals: any[];
+  timeBlocks: any[];
+  healthMetrics: any[];
+  notes: any[];
+}
+
+const defaultDashboardData: DashboardData = {
+  user: null,
+  tasks: [],
+  habits: [],
+  goals: [],
+  timeBlocks: [],
+  healthMetrics: [],
+  notes: [],
+};
+
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [taskModalOpen, setTaskModalOpen] = useState(false);
@@ -29,19 +49,11 @@ export default function Dashboard() {
   const [timeBlockModalOpen, setTimeBlockModalOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<any>(null);
 
-  const { data: dashboardData, isLoading } = useQuery({
+  const { data: dashboardData = defaultDashboardData, isLoading } = useQuery<DashboardData>({
     queryKey: ["/api/dashboard"],
   });
 
-  const { user, tasks, habits, goals, timeBlocks, healthMetrics, notes } = dashboardData || {
-    user: null,
-    tasks: [],
-    habits: [],
-    goals: [],
-    timeBlocks: [],
-    healthMetrics: [],
-    notes: []
-  };
+  const { user, tasks, habits, goals, timeBlocks, healthMetrics, notes } = dashboardData;
 
   if (isLoading) {
     return (
